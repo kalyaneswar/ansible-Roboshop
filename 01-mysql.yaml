@@ -1,5 +1,5 @@
 - name: install mysql component
-  hosts: mysql
+  hosts: localhost
   become: yes
   tasks:
     # Task 1: Install MySQL Server using DNF package manager
