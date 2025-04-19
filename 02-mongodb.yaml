@@ -10,7 +10,7 @@
 
 # Task2:  Mongo DB Install
     - name: Install mongo db
-      ansible.build.dnf:
+      ansible.build.yum:
         name: mongodb-org
         state: latest
 
