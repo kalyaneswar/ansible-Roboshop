@@ -2,6 +2,7 @@
   hosts: localhost
   become: yes
   tasks:
+  #  TASK 1: Install Mysql server
     - name: Install MySQL Server
       ansible.builtin.yum:
         name: mysql-server

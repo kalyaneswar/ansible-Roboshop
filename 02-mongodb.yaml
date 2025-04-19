@@ -1,0 +1,33 @@
+- name: Install MongoDB Component
+  hosts: localhost
+  become: yes
+  tasks:
+  #  TASK 1: Copy mongo repo
+    - name: Copy mongo repo
+      ansible.builtin.copy:
+        src: mongo.repo
+        dest: /etc/yum.repos.d/mongo.repo
+
+# Task2:  Mongo DB Install
+    - name: Install mongo db
+      ansible.build.dnf:
+        name: mongodb-org
+        state: latest
+
+# Task3: Monog DB enable and start
+    - name: Enable and start Mongo db
+      ansible.build.service:
+        name: mongod
+        state: started
+        enabled: yes
+      
+# Task 4: Edit the config file
+    - name: Edit config file
+      ansible.build.command:
+        cmd: sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf 
+
+# Task 5: restart the mongo DB
+    - name: restart Mongo db
+      ansible.build.service:
+        name: mongod
+        state: restarted
