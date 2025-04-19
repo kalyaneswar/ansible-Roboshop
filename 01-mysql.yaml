@@ -4,7 +4,7 @@
   tasks:
     # Task 1: Install MySQL Server using DNF package manager
   - name: Install mysql-server
-    ansible.builtin.yum:
+    ansible.builtin.dnf:
       name: mysql-server
       state: latest
 
