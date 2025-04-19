@@ -22,9 +22,11 @@
         enabled: yes
       
 # Task 4: Edit the config file
-    - name: Edit config file
-      ansible.builtin.command:
-        cmd: sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf 
+    - name: allow remote conncections
+      ansible.builtin.replace:
+        path: /etc/mongod.conf
+        regexp: '127.0.0.1'
+        replace: '0.0.0.0'
 
 # Task 5: restart the mongo DB
     - name: restart Mongo db
