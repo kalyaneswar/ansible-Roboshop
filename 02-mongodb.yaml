@@ -10,24 +10,24 @@
 
 # Task2:  Mongo DB Install
     - name: Install mongo db
-      ansible.build.yum:
+      ansible.builtin.yum:
         name: mongodb-org
         state: latest
 
 # Task3: Monog DB enable and start
     - name: Enable and start Mongo db
-      ansible.build.service:
+      ansible.builtin.service:
         name: mongod
         state: started
         enabled: yes
       
 # Task 4: Edit the config file
     - name: Edit config file
-      ansible.build.command:
+      ansible.builtin.command:
         cmd: sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf 
 
 # Task 5: restart the mongo DB
     - name: restart Mongo db
-      ansible.build.service:
+      ansible.builtin.service:
         name: mongod
         state: restarted
