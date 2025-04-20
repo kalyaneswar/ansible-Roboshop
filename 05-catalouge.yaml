@@ -1,5 +1,5 @@
 - name: Install and setup catalouge service
-  becomes: yes
+  become: yes
   hosts: localhost
   tasks:
   #  TASK1: Disbale nodejs
