@@ -1,0 +1,59 @@
+- name: Install and setup web service
+  become: yes
+  hosts: localhost
+
+  tasks:
+
+    # TASK 1: Install nginx
+    - name: Install nginx package
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    # TASK 2: Enable and start nginx
+    - name: Enable and start nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    # TASK 3: Remove default nginx HTML content
+    - name: Clean default nginx HTML files
+      ansible.builtin.file:
+        path: /usr/share/nginx/html/
+        state: absent
+      notify: Create HTML directory
+
+    # TASK 4: Download web content zip
+    - name: Download web zip file
+      ansible.builtin.get_url:
+        url: https://roboshop-builds.s3.amazonaws.com/web.zip
+        dest: /tmp/web.zip
+
+    # TASK 5: Extract web content into nginx html directory
+    - name: Extract web content
+      ansible.builtin.unarchive:
+        src: /tmp/web.zip
+        dest: /usr/share/nginx/html/
+        remote_src: no
+
+    # TASK 6: Copy roboshop nginx config
+    - name: Copy roboshop nginx config file
+      ansible.builtin.copy:
+        src: roboshop.conf
+        dest: /etc/nginx/default.d/roboshop.conf
+
+    # TASK 7: Restart nginx to apply new config
+    - name: Restart nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+
+  handlers:
+    # HANDLER 1: Recreate the /usr/share/nginx/html directory after it was deleted
+    # This ensures the directory exists before extracting the web content
+    - name: Create HTML directory
+      ansible.builtin.file:
+        path: /usr/share/nginx/html/
+        state: directory
+        mode: '0755'

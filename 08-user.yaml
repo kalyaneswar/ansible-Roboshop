@@ -1,0 +1,100 @@
+- name: Install and setup user service
+  become: yes
+  hosts: localhost
+
+  vars:
+    mongo_host: mongodb.kalyaneswar.site
+
+  tasks:
+
+    # TASK 1: Disable the default Node.js module (cleaner approach)
+    - name: Disable default Node.js module
+      ansible.builtin.shell: dnf module disable nodejs -y
+
+    # TASK 2: Enable Node.js 20 version
+    - name: Enable Node.js 20 module
+      ansible.builtin.shell: dnf module enable nodejs:20 -y
+
+    # TASK 3: Install Node.js
+    - name: Install Node.js
+      ansible.builtin.dnf:
+        name: nodejs
+        state: present
+
+    # TASK 4: Create roboshop user
+    - name: Add roboshop user
+      ansible.builtin.user:
+        name: roboshop
+
+    # TASK 5: Create /app directory
+    - name: Create /app directory
+      ansible.builtin.file:
+        path: /app
+        state: directory
+        mode: '0755'
+
+    # TASK 6: Download user source code
+    - name: Download user zip file
+      ansible.builtin.get_url:
+        url: https://roboshop-builds.s3.amazonaws.com/user.zip
+        dest: /tmp/user.zip
+
+    # TASK 7: Extract user zip into /app
+    - name: Unarchive user code
+      ansible.builtin.unarchive:
+        src: /tmp/user.zip
+        dest: /app
+        remote_src: no
+
+    # TASK 8: Install Node.js dependencies
+    - name: Run npm install in /app
+      ansible.builtin.shell: npm install
+      args:
+        chdir: /app
+
+    # TASK 9: Copy user service file
+    - name: Copy user.service file
+      ansible.builtin.copy:
+        src: user.service
+        dest: /etc/systemd/system/user.service
+
+    # TASK 10: Reload systemd daemon
+    - name: Reload systemd daemon
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+
+    # TASK 11: Start and enable user service
+    - name: Enable and start user service
+      ansible.builtin.service:
+        name: user
+        state: started
+        enabled: yes
+
+    # TASK 12: Copy MongoDB repo file
+    - name: Copy MongoDB repo file
+      ansible.builtin.copy:
+        src: mongo.repo
+        dest: /etc/yum.repos.d/mongo.repo
+
+    # TASK 13: Install MongoDB client
+    - name: Install MongoDB client
+      ansible.builtin.dnf:
+        name: mongodb-mongosh
+        state: present
+
+    # TASK 14: Check if 'user' collection exists
+    - name: Check if users collection is empty
+      ansible.builtin.command: >
+        mongosh --host {{ mongo_host }} --quiet --eval 'db = db.getSiblingDB("user"); db.users.count()'
+      register: user_count
+
+    # TASK 15: Load user.js schema only if user count is 0
+    - name: Load user schema if users are not present
+      ansible.builtin.command: mongosh --host {{ mongo_host }} < /app/schema/user.js
+      when: user_count.stdout | int == 0
+
+    # TASK 16: Restart user service
+    - name: Restart user service
+      ansible.builtin.service:
+        name: user
+        state: restarted

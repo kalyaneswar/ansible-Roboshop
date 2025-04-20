@@ -1,0 +1,64 @@
+- name: Install and setup payment service
+  become: yes
+  hosts: localhost
+
+  tasks:
+
+    # TASK 1: Install dependencies for Python-based payment service
+    - name: Install required packages
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - python3.11
+        - gcc
+        - python3-devel
+
+    # TASK 2: Create roboshop user
+    - name: Add roboshop user
+      ansible.builtin.user:
+        name: roboshop
+
+    # TASK 3: Create /app directory
+    - name: Create /app directory
+      ansible.builtin.file:
+        path: /app
+        state: directory
+        mode: '0755'
+
+    # TASK 4: Download payment source code
+    - name: Download payment zip file
+      ansible.builtin.get_url:
+        url: https://roboshop-builds.s3.amazonaws.com/payment.zip
+        dest: /tmp/payment.zip
+
+    # TASK 5: Extract payment code into /app
+    - name: Unarchive payment code
+      ansible.builtin.unarchive:
+        src: /tmp/payment.zip
+        dest: /app
+        remote_src: no
+
+    # TASK 6: Install Python dependencies using pip
+    - name: Install Python requirements
+      ansible.builtin.shell: pip3.11 install -r requirements.txt
+      args:
+        chdir: /app
+
+    # TASK 7: Copy payment systemd service file
+    - name: Copy payment.service file
+      ansible.builtin.copy:
+        src: payment.service
+        dest: /etc/systemd/system/payment.service
+
+    # TASK 8: Reload systemd to recognize new service
+    - name: Reload systemd daemon
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+
+    # TASK 9: Start and enable payment service
+    - name: Start and enable payment service
+      ansible.builtin.service:
+        name: payment
+        state: started
+        enabled: yes
