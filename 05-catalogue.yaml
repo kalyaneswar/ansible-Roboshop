@@ -82,16 +82,16 @@
         state: present
 
     # TASK 14: Check if MongoDB already has product data loaded
-    - name: Check if product data already exists
-      ansible.builtin.command: >
-        mongo --host mongodb.kalyaneswar.site --quiet --eval
-        'db = db.getSiblingDB("catalogue"); db.products.count()'
-      register: product_count  # Save the output to a variable
+    # - name: Check if product data already exists
+    #   ansible.builtin.command: >
+    #     mongo --host mongodb.kalyaneswar.site --quiet --eval
+    #     'db = db.getSiblingDB("catalogue"); db.products.count()'
+    #   register: product_count  # Save the output to a variable
 
     # TASK 15: Load data into MongoDB only if not already loaded
     - name: Load catalogue schema if products are not present
       ansible.builtin.command: mongo --host mongodb.kalyaneswar.site < /app/schema/catalogue.js
-      when: product_count.stdout == "0"  # Only run if count is 0
+      # when: product_count.stdout == "0"  # Only run if count is 0
 
     # TASK 16: Restart the catalogue service to make sure it's fresh
     - name: Restart catalogue service
