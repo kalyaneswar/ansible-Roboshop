@@ -24,7 +24,7 @@
         enabled: yes  # Ensure the service starts on boot
 
   # Task 4: Set passwd for root
-    - name: Run command if /path/to/database does not exist (with 'cmd' parameter)
+    - name: Run command to set passwd
       ansible.builtin.command:
         cmd: mysql_secure_installation --set-root-pass RoboShop@1
     
