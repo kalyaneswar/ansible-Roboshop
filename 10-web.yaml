@@ -22,7 +22,13 @@
       ansible.builtin.file:
         path: /usr/share/nginx/html/
         state: absent
-      notify: Create HTML directory
+
+    # ✅ TASK 3.1: Create HTML directory immediately
+    - name: Create nginx HTML directory
+      ansible.builtin.file:
+        path: /usr/share/nginx/html/
+        state: directory
+        mode: '0755'
 
     # TASK 4: Download web content zip
     - name: Download web zip file
@@ -48,12 +54,3 @@
       ansible.builtin.service:
         name: nginx
         state: restarted
-
-  handlers:
-    # HANDLER 1: Recreate the /usr/share/nginx/html directory after it was deleted
-    # This ensures the directory exists before extracting the web content
-    - name: Create HTML directory
-      ansible.builtin.file:
-        path: /usr/share/nginx/html/
-        state: directory
-        mode: '0755'
