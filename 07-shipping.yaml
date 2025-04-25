@@ -1,6 +1,6 @@
 - name: Install and setup shipping service
   become: yes  # Run all tasks as sudo/root
-  hosts: localhost  # Target is the local machine
+  hosts: shipping  # Target is the shipping machine
 
   vars:
     mysql_password: RoboShop@1

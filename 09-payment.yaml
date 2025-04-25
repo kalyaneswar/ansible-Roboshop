@@ -1,6 +1,6 @@
 - name: Install and setup payment service
   become: yes
-  hosts: localhost
+  hosts: payment
 
   tasks:
 

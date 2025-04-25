@@ -1,6 +1,6 @@
 - name: Install and setup user service
   become: yes
-  hosts: localhost
+  hosts: user
 
   vars:
     mongo_host: mongodb.kalyaneswar.site

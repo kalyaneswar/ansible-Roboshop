@@ -1,5 +1,5 @@
 - name: Install MongoDB Component
-  hosts: localhost
+  hosts: mongodb
   become: yes
   tasks:
   #  TASK 1: Copy mongo repo

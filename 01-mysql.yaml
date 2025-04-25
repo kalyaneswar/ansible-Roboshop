@@ -1,5 +1,5 @@
 - name: Install MySQL Component
-  hosts: localhost
+  hosts: mysql
   become: yes
   tasks:
   #  TASK 1: Install Mysql server

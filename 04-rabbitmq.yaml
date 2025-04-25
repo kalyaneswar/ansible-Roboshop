@@ -1,5 +1,5 @@
 - name: Install and Configure RabbitMQ
-  hosts: localhost
+  hosts: rabbitmq
   become: yes
   tasks:
     # Task 1: Configure Erlang repo

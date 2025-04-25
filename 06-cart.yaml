@@ -1,6 +1,6 @@
 - name: Install and setup cart service
   become: yes  # Run all tasks as sudo/root
-  hosts: localhost  # Target is the local machine
+  hosts: cart  # Target is the cart machine
 
   tasks:
 

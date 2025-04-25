@@ -1,6 +1,6 @@
 - name: Install and setup web service
   become: yes
-  hosts: localhost
+  hosts: web
 
   tasks:
 

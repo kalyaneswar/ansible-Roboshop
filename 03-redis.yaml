@@ -1,6 +1,6 @@
 - name: Redis configuration and Installation
   become: yes
-  hosts: localhost
+  hosts: redis
   tasks:
   #  TASK1 Install redis
     - name: Install redis 
