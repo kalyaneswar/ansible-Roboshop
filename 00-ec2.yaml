@@ -22,9 +22,11 @@
 
   tasks:
     - name: Get Route53 Zone ID
-      amazon.aws.route53:
-        query: hosted_zone
+      amazon.aws.route53_zone_info:
+        hosted_zone_names:
+          - "{{ hosted_zone }}"
       register: zone_info
+
 
     - name: Set Hosted Zone ID
       set_fact:
