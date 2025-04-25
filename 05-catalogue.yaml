@@ -90,7 +90,7 @@
 
     # TASK 15: Load data into MongoDB only if not already loaded
     - name: Load catalogue schema if products are not present
-      ansible.builtin.command: mongosh --host 172.31.90.188 < /app/schema/catalogue.js
+      ansible.builtin.command: mongosh --host mongodb.kalyaneswar.site < /app/schema/catalogue.js
       # when: product_count.stdout == "0"  # Only run if count is 0
 
     # TASK 16: Restart the catalogue service to make sure it's fresh
