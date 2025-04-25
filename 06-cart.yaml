@@ -54,7 +54,7 @@
       ansible.builtin.copy:
         src: cart.service
         dest: /etc/systemd/system/cart.service
-        remote_src: no
+        remote_src: yes
 
     # TASK 10: Reload systemd daemon so it picks up new service
     - name: Reload systemd daemon
