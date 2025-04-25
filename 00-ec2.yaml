@@ -22,7 +22,7 @@
 
   tasks:
     - name: Get Route53 Zone ID
-      amazon.aws.route53_zone_info:
+      amazon.aws.route53:
         query: hosted_zone
       register: zone_info
 
