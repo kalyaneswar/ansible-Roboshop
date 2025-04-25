@@ -37,7 +37,7 @@
       ansible.builtin.unarchive:
         src: /tmp/payment.zip
         dest: /app
-        remote_src: no
+        remote_src: yes
 
     # TASK 6: Install Python dependencies using pip
     - name: Install Python requirements

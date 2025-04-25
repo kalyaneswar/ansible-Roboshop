@@ -41,7 +41,7 @@
       ansible.builtin.unarchive:
         src: /tmp/cart.zip
         dest: /app
-        remote_src: no  # File is present on control node (localhost)
+        remote_src: yes  # File is present on control node (localhost--No, remote yes)
 
     # TASK 8: Run npm install inside /app to install dependencies
     - name: Run npm install in /app

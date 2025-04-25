@@ -44,7 +44,7 @@
       ansible.builtin.unarchive:
         src: /tmp/user.zip
         dest: /app
-        remote_src: no
+        remote_src: yes
 
     # TASK 8: Install Node.js dependencies
     - name: Run npm install in /app

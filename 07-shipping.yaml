@@ -37,7 +37,7 @@
       ansible.builtin.unarchive:
         src: /tmp/shipping.zip
         dest: /app
-        remote_src: no
+        remote_src: yes
 
     # TASK 6: Compile the application using Maven
     - name: Run mvn clean package in /app
